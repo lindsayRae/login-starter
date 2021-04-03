@@ -6,14 +6,18 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userName, setUserName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
   const { setUser } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!userName) {
-      setError('You must provide a username');
+    if (!firstName) {
+      setError('You must provide a First Name');
+      return;
+    } else if (!lastName) {
+      setError('You must provide a Last Name');
       return;
     } else if (!email) {
       setError('You must provide an email');
@@ -34,32 +38,33 @@ const Signup = () => {
       setError('Your passwords do not match.');
       return;
     }
-    // try {
-    //   const response = await fetch('/api/users/register', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       userName,
-    //       email,
-    //       password,
-    //     }),
-    //   });
+    try {
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+        }),
+      });
 
-    //   const data = await response.json();
-    //   console.log(data);
-    //   if (data.message) {
-    //     setError(data.message);
-    //     return;
-    //   } else {
-    //     setUser(data);
-    //     setFormSuccess(true);
-    //     localStorage.setItem('userData', JSON.stringify(data));
-    //   }
-    // } catch (err) {
-    //   setError('Something went wrong: ', err);
-    // }
+      const data = await response.json();
+      console.log(data);
+      if (data.message) {
+        setError(data.message);
+        return;
+      } else {
+        setUser(data);
+        //  setFormSuccess(true);
+        localStorage.setItem('userData', JSON.stringify(data));
+      }
+    } catch (err) {
+      setError('Something went wrong: ', err);
+    }
   };
   const validateEmail = (email) => {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -79,12 +84,28 @@ const Signup = () => {
             <input
               type='text'
               name='firstName'
-              value={userName}
+              value={firstName}
               autoComplete='off'
               className='form-input'
               onChange={(event) => {
                 setError('');
-                setUserName(event.target.value);
+                setFirstName(event.target.value);
+              }}
+            />
+          </div>
+          <div className='stack-form'>
+            <label htmlFor='lastName' className='form-label'>
+              Last Name
+            </label>
+            <input
+              type='text'
+              name='lastName'
+              value={lastName}
+              autoComplete='off'
+              className='form-input'
+              onChange={(event) => {
+                setError('');
+                setLastName(event.target.value);
               }}
             />
           </div>
