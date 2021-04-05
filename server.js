@@ -1,10 +1,20 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 1234;
 const mongoose = require('mongoose');
-require('dotenv').config();
 
+app.use(cors());
+app.use(express.json());
+
+const privateKey = process.env.login_jwtPrivateKey;
+
+if (!privateKey) {
+  console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+  // 0 is success, anything else is failure
+  process.exit(1);
+}
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -18,12 +28,11 @@ connection.once('open', () => {
 
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
-
-app.use(cors());
-app.use(express.json());
+const auth = require('./routes/auth');
 
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/auth', auth);
 
 if (process.env.NODE_ENV === 'production') {
   console.log('in production');
