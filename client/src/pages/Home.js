@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 
-import { NavLink } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-
+import Navbar from '../components/Navigation';
 const Dashboard = (props) => {
   const { user } = useContext(UserContext);
   const isAuthenticated = localStorage.getItem('userData');
@@ -21,28 +20,7 @@ const Dashboard = (props) => {
             Hello {user.user.firstName} {user.user.lastName}
           </h2>
           <p className='login-text'>This is the home page.</p>
-          <ul>
-            <li>
-              <NavLink to='/contact' exact>
-                Contact Us
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to='/reset' exact>
-                Reset Password
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to='/delete' exact>
-                Delete Account
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to='/logout' exact>
-                Logout
-              </NavLink>
-            </li>
-          </ul>
+          <Navbar />
         </>
       )}
     </div>

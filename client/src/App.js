@@ -6,6 +6,7 @@ import Activate from './pages/Activate';
 import StartPassReset from './pages/StartPassReset';
 import FinishPassReset from './pages/FinishPassReset';
 import Home from './pages/Home';
+import Contact from './pages/Contact';
 
 import './App.css';
 
@@ -20,6 +21,7 @@ const App = () => {
           <Route path='/forgotpass' exact component={StartPassReset} />
           <Route path='/reset-pass' exact component={FinishPassReset} />
           <Route path='/home' exact component={Home} />
+          <Route path='/contact' exact component={Contact} />
         </Switch>
       </div>
     </BrowserRouter>
