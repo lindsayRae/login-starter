@@ -4,11 +4,11 @@ const { User, validateUser } = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 
+const { sendEmail } = require('../middleware/email');
 /**
  * @description CREATE a new user
  */
 router.post('/register', async (req, res) => {
-  console.log('req.body', req.body);
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send({ message: error.details[0].message });
 
@@ -41,38 +41,47 @@ router.post('/register', async (req, res) => {
 
   //   try {
   let newUser = await user.save();
-  console.log(('newUser', newUser));
+
+  sendEmail(newUser.firstName, newUser.lastName, newUser.email, newUser.GUID);
   res.send(newUser);
-  //     //? Need to create a header for the creation of the blank you document in personalRecord
-  //     let headers = {
-  //       'Content-Type': 'application/json',
-  //     };
-  //     const token = user.generateAuthToken();
-
-  //     //? Call out to existing endpoint to create a new PR record with empty arrays (lifts, cardio, skills)
-
-  //     //! For the backend you need an absolute URL for the fetch method to work
-  //     let baseURL = process.env.baseURL;
-  //     let url = `${baseURL}/api/users/usersetup/${newUser._id}`;
-
-  //     let response = await fetch(url, {
-  //       method: 'POST',
-  //       headers: headers,
-  //     });
-
-  //     let json = await response.json();
-
-  //     sendEmail(user.userName, user.email, user.GUID);
-  //     res.send({
-  //       jwt: token,
-  //       user: _.pick(user, ['userName', 'email', '_id', 'activated']),
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     return res.status(500).send({
-  //       message: 'There was a problem creating your user, please try again later',
-  //     });
-  //   }
 });
 
+/**
+ * @description generate new GUID to reset password
+ */
+
+router.put('/reset', async (req, res) => {
+  console.log('in /reset...');
+  try {
+    let user = await User.findOne({ email: req.body.email });
+    console.log('user: ', user);
+    if (!user) {
+      return res.status(400).send({
+        message: 'If this account is registered you will receive an email.',
+      });
+    }
+
+    user.GUID = uuidv4();
+    let result = await user.save();
+
+    console.log('result', result);
+    sendEmailReset(user.firstName, user.lastName, user.email, user.GUID);
+
+    return res.send({
+      user: _.pick(user, [
+        'firstName',
+        'lastName',
+        'email',
+        '_id',
+        'activated',
+        'GUID',
+      ]),
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: 'There was a problem with the server, please try again later.',
+    });
+  }
+});
 module.exports = router;

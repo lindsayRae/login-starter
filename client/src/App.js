@@ -2,34 +2,12 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Activate from './pages/Activate';
+import StartPassReset from './pages/StartPassReset';
+import FinishPassReset from './pages/FinishPassReset';
 
 import './App.css';
 
-// const usePosts = () => {
-//   const [post, setPosts] = useState([]);
-
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//       const res = await fetch('/api/posts');
-//       const data = await res.json();
-//       setPosts(data);
-//     };
-//     fetchPosts();
-//   }, []);
-//   return post;
-// };
-
-// function App() {
-//   const posts = usePosts();
-
-//   return (
-//     <div className='App'>
-//       {posts.map((post) => (
-//         <h2 key={post.id}>{post.title}</h2>
-//       ))}
-//     </div>
-//   );
-// }
 const App = () => {
   return (
     <BrowserRouter>
@@ -37,6 +15,9 @@ const App = () => {
         <Switch>
           <Route path='/' exact component={Login} />
           <Route path='/signup' exact component={Signup} />
+          <Route path='/activate' exact component={Activate} />
+          <Route path='/forgotpass' exact component={StartPassReset} />
+          <Route path='/reset-pass' exact component={FinishPassReset} />
         </Switch>
       </div>
     </BrowserRouter>

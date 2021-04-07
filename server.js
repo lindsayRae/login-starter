@@ -29,10 +29,12 @@ connection.once('open', () => {
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
 const auth = require('./routes/auth');
+const activateRouter = require('./routes/activate');
 
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', auth);
+app.use('/api/activate', activateRouter);
 
 if (process.env.NODE_ENV === 'production') {
   console.log('in production');
