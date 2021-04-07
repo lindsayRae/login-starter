@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import Activate from './pages/Activate';
 import StartPassReset from './pages/StartPassReset';
 import FinishPassReset from './pages/FinishPassReset';
+import Home from './pages/Home';
 
 import './App.css';
 
@@ -18,6 +19,7 @@ const App = () => {
           <Route path='/activate' exact component={Activate} />
           <Route path='/forgotpass' exact component={StartPassReset} />
           <Route path='/reset-pass' exact component={FinishPassReset} />
+          <Route path='/home' exact component={Home} />
         </Switch>
       </div>
     </BrowserRouter>

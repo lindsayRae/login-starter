@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
-const Login = () => {
+const Login = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -36,7 +36,7 @@ const Login = () => {
 
       setUser(data);
       localStorage.setItem('userData', JSON.stringify(data));
-      // history.push('/dashboard');
+      history.push('/home');
     } catch (err) {
       setError(`Something went wrong: ${err}`);
     }
