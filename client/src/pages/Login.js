@@ -15,31 +15,31 @@ const Login = () => {
       setError('You must provide an email and password.');
       return;
     }
-    // try {
-    //   const response = await fetch(`/api/auth`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       email,
-    //       password,
-    //     }),
-    //   });
+    try {
+      const response = await fetch(`/api/auth`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    //   const data = await response.json();
+      const data = await response.json();
+      console.log(data);
+      if (data.message) {
+        setError(data.message);
+        return;
+      }
 
-    //   if (data.message) {
-    //     setError(data.message);
-    //     return;
-    //   }
-
-    //   setUser(data);
-    //   localStorage.setItem('userData', JSON.stringify(data));
-    //   // history.push('/dashboard');
-    // } catch (err) {
-    //   setError(`Something went wrong: ${err}`);
-    // }
+      setUser(data);
+      localStorage.setItem('userData', JSON.stringify(data));
+      // history.push('/dashboard');
+    } catch (err) {
+      setError(`Something went wrong: ${err}`);
+    }
   };
 
   return (
@@ -97,7 +97,7 @@ const Login = () => {
         </p>
         <p className=''>
           Forgot password?{' '}
-          <NavLink to='/reset' exact>
+          <NavLink to='/forgotpass' exact>
             {' '}
             Reset
           </NavLink>
