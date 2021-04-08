@@ -7,6 +7,7 @@ import StartPassReset from './pages/StartPassReset';
 import FinishPassReset from './pages/FinishPassReset';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
+import DeleteAccount from './pages/DeleteAccount';
 
 import './App.css';
 
@@ -22,6 +23,7 @@ const App = () => {
           <Route path='/reset-pass' exact component={FinishPassReset} />
           <Route path='/home' exact component={Home} />
           <Route path='/contact' exact component={Contact} />
+          <Route path='/delete' exact component={DeleteAccount} />
         </Switch>
       </div>
     </BrowserRouter>

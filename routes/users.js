@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 
 const { sendEmail } = require('../middleware/email');
+const auth = require('../middleware/auth');
 /**
  * @description CREATE a new user
  */
@@ -44,6 +45,23 @@ router.post('/register', async (req, res) => {
 
   sendEmail(newUser.firstName, newUser.lastName, newUser.email, newUser.GUID);
   res.send(newUser);
+});
+
+/**
+ * @description DELETE user
+ */
+router.delete('/deleteaccount/:id', auth, async (req, res) => {
+  let id = req.params.id;
+  try {
+    let user = await User.deleteOne({ _id: id });
+
+    if (user.deletedCount == 0) {
+      return res.send({ message: 'Error trying to delete user account' });
+    }
+    res.send({ removed: true });
+  } catch (err) {
+    res.send({ message: error.message });
+  }
 });
 
 /**
