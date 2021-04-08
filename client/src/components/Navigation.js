@@ -15,6 +15,11 @@ const Navbar = () => {
       <h4>Navigation:</h4>
       <ul>
         <li>
+          <NavLink to='/home' exact>
+            Home
+          </NavLink>
+        </li>
+        <li>
           <NavLink to='/contact' exact>
             Contact Us
           </NavLink>
