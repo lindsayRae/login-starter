@@ -22,8 +22,9 @@ const Contact = (props) => {
       return;
     }
 
+    let fullName = `${user.user.firstName} ${user.user.lastName}`;
     let body = {
-      name: user.user.userName,
+      name: fullName,
       email: user.user.email,
       message: message,
     };
@@ -38,7 +39,7 @@ const Contact = (props) => {
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (data.status !== 200) {
         setError(data.message);
         return;
