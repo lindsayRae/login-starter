@@ -3,8 +3,9 @@ const router = express.Router();
 const { User, validateUser } = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
-
+const _ = require('lodash');
 const { sendEmail } = require('../middleware/email');
+const { sendEmailReset } = require('../middleware/email-reset');
 const auth = require('../middleware/auth');
 /**
  * @description CREATE a new user
@@ -102,4 +103,69 @@ router.put('/reset', async (req, res) => {
     });
   }
 });
+
+/**
+ * @description UPDATE for forgot password reset
+ */
+router.put('/forgotpass/newpass', async (req, res) => {
+  try {
+    let user = await User.findOne({ email: req.body.email });
+    console.log('user: ', user);
+    if (!user) {
+      return res.status(400).send({ message: 'No User' });
+    }
+
+    let password = req.body.password;
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    let result = await user.save();
+    console.log('RESULT', result);
+    res.send({ result });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: 'There was a problem creating your user, please try again later',
+    });
+  }
+});
+
+/**
+ * @description UPDATE for change password
+ */
+router.put('/change-password', async (req, res) => {
+  try {
+    let user = await User.findOne({ email: req.body.email });
+    console.log('user: ', user);
+    if (!user) {
+      return res.status(400).send({ message: 'No User' });
+    }
+
+    const validPassword = await bcrypt.compare(
+      req.body.oldPassword,
+      user.password
+    );
+    console.log(validPassword);
+
+    if (!validPassword) {
+      return res.status(400).send({ message: 'Invalid password.' });
+    }
+
+    let newPassword = req.body.newPassword;
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    let result = await user.save();
+    console.log('result!!!', result);
+    res.send({ result });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: 'There was a problem changing, please try again later',
+    });
+  }
+});
+
 module.exports = router;

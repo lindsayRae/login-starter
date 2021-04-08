@@ -25,7 +25,7 @@ const Navbar = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to='/reset' exact>
+          <NavLink to='/change-pass' exact>
             Reset Password
           </NavLink>
         </li>

@@ -10,9 +10,8 @@ const PassReset = (props) => {
   const [loading, setLoading] = useState(true);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
-  console.log('props', props);
   let params = queryString.parse(props.location.search);
-  console.log('params', params);
+
   useEffect(() => {
     validateAccount();
   }, []);
@@ -63,7 +62,7 @@ const PassReset = (props) => {
       password: password,
     };
     try {
-      const res = await fetch('/api/users/newpass', {
+      const res = await fetch('/api/users/forgotpass/newpass', {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
@@ -153,7 +152,7 @@ const PassReset = (props) => {
           <p className='login-text'></p>
 
           <div className='splash-buttons' style={{ marginTop: '30px' }}>
-            <NavLink to='/login' exact>
+            <NavLink to='/' exact>
               <button className='btn btn-primary'>Back to Login</button>
             </NavLink>
           </div>
